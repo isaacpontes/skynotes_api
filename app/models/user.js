@@ -20,6 +20,7 @@ userSchema.pre('save', function (next) {
       }
     });
   }
+  next();
 });
 
 userSchema.methods.checkPassword = function (password, callback) {
