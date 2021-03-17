@@ -1,8 +1,9 @@
 require('dotenv').config();
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+const withAuth = require('../middlewares/auth');
 const secret = process.env.JWT_KEY;
 
 router.post('/register', async (req, res) => {
@@ -37,6 +38,43 @@ router.post('/login', async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: 'Internal server error, please try again.' });
+  }
+});
+
+router.put('/', withAuth, async (req, res) => {
+  const { name, email } = req.body;
+  
+  try {
+    const user = await User.findById(req.user._id);
+    if (name !== undefined) user.name = name;
+    if (email !== undefined) user.email = email;
+    await user.save();
+    res.json(user).status(201);
+  } catch (err) {
+    res.status(401).json({ error: err, message: 'Internal server error, please try again.' });
+  }
+});
+
+router.put('/password', withAuth, async (req, res) => {
+  const { password } = req.body;
+  
+  try {
+    const user = await User.findById(req.user._id);
+    if (password !== undefined) user.password = password;
+    await user.save();
+    res.json(user).status(201);
+  } catch (err) {
+    res.status(401).json({ error: err, message: 'Internal server error, please try again.' });
+  }
+});
+
+router.delete('/', withAuth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    await user.delete();
+    res.json({ message: 'OK' }).status(201);
+  } catch (err) {
+    res.status(401).json({ error: err, message: 'Internal server error, please try again.' });
   }
 });
 
