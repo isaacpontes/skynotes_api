@@ -19,8 +19,9 @@ userSchema.pre('save', function (next) {
         next();
       }
     });
+  } else {
+    next();
   }
-  next();
 });
 
 userSchema.methods.checkPassword = function (password, callback) {
