@@ -1,8 +1,10 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
+const mongoUrl = process.env.MONGO_URL;
 
 mongoose.Promise = global.Promise;
 
-mongoose.connect('mongodb://localhost/skynotes', {
+mongoose.connect(mongoUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true

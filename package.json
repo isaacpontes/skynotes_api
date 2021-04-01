@@ -6,6 +6,9 @@
     "start": "node ./bin/www",
     "dev": "npx nodemon start"
   },
+  "engines": {
+    "node": "14.16.0"
+  },
   "dependencies": {
     "bcrypt": "^5.0.0",
     "cookie-parser": "~1.4.4",
